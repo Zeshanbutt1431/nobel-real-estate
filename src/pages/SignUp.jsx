@@ -74,7 +74,7 @@ export default function SignUp() {
 								id='password'
 								value={password}
 								onChange={onChange}
-								placeholder='Email password' />
+								placeholder='Password' />
 							{showPassword ?
 								<AiFillEyeInvisible
 									className='absolute right-3 top-3 text-xl cursor-pointer'
