@@ -1,45 +1,47 @@
 import { getAuth, updateProfile } from "firebase/auth";
-import {doc, updateDoc} from "firebase/firestore";
-import {db} from '../firebase';
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from '../firebase';
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
+import { FcHome } from "react-icons/fc"
+import { Link } from "react-router-dom";
 export default function Profile() {
-	const [formData, setFormData] = useState({
-		name: "Zeshan",
-		email: "Zeshan.butt3331@gmail.com"
-	});
 	const auth = getAuth()
 	const navigate = useNavigate()
 	const [changeDetail, setChangeDetail] = useState(false)
+	const [formData, setFormData] = useState({
+		name: auth.currentUser.displayName,
+		email: auth.currentUser.email,
+	});
 	const { name, email } = formData
 
 	function onLogout() {
 		auth.signOut()
 		navigate("/")
 	}
-	function onChange(e){
-		setFormData((prevState) =>({
+	function onChange(e) {
+		setFormData((prevState) => ({
 			...prevState,
-			[e.target.id]:e.target.value
-		}))	
+			[e.target.id]: e.target.value,
+		}))
 	}
-	async	function onSubmit(){
+	async function onSubmit() {
 		try {
-			if(auth.currentUser.displayName !== name){
+			if (auth.currentUser.displayName !== name) {
 				//update name in Firebase Authentication
-				await updateProfile(auth.currentUser,{
+				await updateProfile(auth.currentUser, {
 					displayName: name,
 				});
 				//update name in Firebase Firestore
-				const docRef = doc(db,"users", auth.currentUser.uid)
-				await updateDoc(docRef,{
+				const docRef = doc(db, "users", auth.currentUser.uid)
+				await updateDoc(docRef, {
 					name,
 				})
 			}
 
 			toast.success("Profile updated sucessfully!")
-			
+
 		} catch (error) {
 			toast.error("Could not update your profile!")
 		}
@@ -63,7 +65,7 @@ export default function Profile() {
 							<p className='flex items-center'>
 								Do you want to change your name?
 								<span
-									onClick={() =>{ 
+									onClick={() => {
 										changeDetail && onSubmit();
 										setChangeDetail((prevState) => !prevState)
 									}}
@@ -74,7 +76,13 @@ export default function Profile() {
 							<p onClick={onLogout} className='text-blue-600 hover:text-blue-700 transition duration-200 ml-1 cursor-pointer'>Sign out</p>
 						</div>
 					</form>
-				</div>
+					<button type="submit" className="bg-blue-600 w-full text-white text-sm py-3 px-7 hover:bg-blue-700 active:bg-blue-800 shadow-md hover:shadow-lg ">
+						<Link to="/create-listing" className="flex justify-center items-center capitalize">
+							<FcHome className="text-3xl bg-red-200 rounded-full p-1 border-2 mr-2" />
+							Sell or rent your home
+						</Link>
+					</button>
+				</div> 
 			</section>
 		</>
 	)
