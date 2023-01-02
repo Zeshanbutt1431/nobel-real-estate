@@ -7,11 +7,15 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import SwipeCore, { EffectFade, Autoplay, Navigation, Pagination } from "swiper";
 import "swiper/css/bundle"
 import { FaShare, FaMapMarkerAlt, FaBed, FaBath, FaParking, FaChair } from "react-icons/fa"
+import { getAuth } from "firebase/auth"
+import Contact from "../components/Contact";
 
 export default function Listing() {
     const params = useParams()
+    const auth = getAuth()
     const [listing, setListing] = useState(null)
     const [loading, setLoading] = useState(true)
+    const [contactLandlord, setContactLandlord] = useState(false)
     const [shareListCopied, setShareListCopied] = useState(false)
     SwipeCore.use([Autoplay, Navigation, Pagination])
     useEffect(() => {
@@ -84,7 +88,7 @@ export default function Listing() {
                         )}
                     </div>
                     <p className="my-3"><span className="font-semibold">Description- </span>{listing.description}</p>
-                    <ul className="flex space-x-2 sm:space-x-10 items-center">
+                    <ul className="flex space-x-2 sm:space-x-10 items-center mb-6">
                         <li className="flex items-center whitespace-nowrap">
                             <FaBed className="text-lg mr-1" />
                             {+listing.bedrooms > 1 ? `${listing.bedrooms} Beds` : "1 Bed"}
@@ -95,13 +99,23 @@ export default function Listing() {
                         </li>
                         <li className="flex items-center whitespace-nowrap">
                             <FaParking className="text-lg mr-1" />
-                            {listing.parking  ? "Parking Spot" : "No Parking"}
+                            {listing.parking ? "Parking Spot" : "No Parking"}
                         </li>
                         <li className="flex items-center whitespace-nowrap">
                             <FaChair className="text-lg mr-1" />
                             {+listing.furnished ? "Furnished" : "Not Furnished"}
                         </li>
                     </ul>
+                    {listing.userRef !== auth.currentUser.uid && !contactLandlord &&  (
+                        <div className="mt-6 ">
+                            <button
+                                onClick={() => {
+                                    setContactLandlord(true)
+                                }}
+                                className="px-7 py-3 bg-blue-600 hover:bg-blue-700 shadow-md hover:shadow-lg text-white text-sm uppercase font-medium focus:bg-blue-700 focus:shadow-lg w-full text-center transition duration-150 ease-in-out">Contact landlord</button>
+                        </div>
+                    )}
+                    {contactLandlord && <Contact userRef={listing.userRef} listing={listing}/>}
                 </div>
                 <div className="bg-blue-300 lg:h-[400px] h-[200px] w-full z-10 overflow-x-hidden"></div>
             </div>
