@@ -70,7 +70,7 @@ export default function Listing() {
             {shareListCopied && <p className="fixed top-[23%] right-[5%] font-semibold border-2 border-gray-400 rounded-md bg-white z-10 p-2">Linked Copied</p>}
 
             <div className="flex flex-col md:flex-row max-w-6xl m-4 lg:mx-auto p-4 rounded-lg shadow-3 bg-white lg:space-x-5 ">
-                <div className="lg:h-[400px] h-[200px] w-full">
+                <div className="h-auto w-full">
                     <p className="text-2xl font-bold mb-3 text-blue-900">
                         {listing.name}  -Pkr {listing.offer ?
                             listing.discountedPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") :
@@ -86,12 +86,12 @@ export default function Listing() {
                             {listing.type === "rent" ? "Rent" : "Sale"}
                         </p>
                         {listing.offer && (
-                            <p className="bg-green-800 w-full max-w-200px rounded-md p-1 text-white text-center font-semibold shadow-md ">${listing.regularPrice - listing.discountedPrice} discount</p>
+                            <p className="bg-green-800 w-full max-w-200px rounded-md p-1 text-white text-center font-semibold shadow-md ">{listing.regularPrice - listing.discountedPrice} discount</p>
                         )}
                     </div>
                     <p className="my-3"><span className="font-semibold">Description- </span>{listing.description}</p>
-                    <ul className="flex space-x-2 sm:space-x-10 items-center mb-6">
-                        <li className="flex items-center whitespace-nowrap">
+                    <ul className="flex space-x-2 sm:space-x-10 items-start sm:items-center flex-col sm:flex-row  mb-6 ">
+                        <li className="flex items-center whitespace-nowrap ml-2">
                             <FaBed className="text-lg mr-1" />
                             {+listing.bedrooms > 1 ? `${listing.bedrooms} Beds` : "1 Bed"}
                         </li>
