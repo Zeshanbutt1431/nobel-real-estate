@@ -5,7 +5,6 @@ import { db } from '../firebase'
 import { collection, getDocs, limit, orderBy, query, startAfter, where } from 'firebase/firestore'
 import Spinner from "../components/Spinner"
 import ListingItem from "../components/ListingItem"
-import { async } from '@firebase/util'
 
 export default function Offers() {
 	const [listings, setListings] = useState(null);
